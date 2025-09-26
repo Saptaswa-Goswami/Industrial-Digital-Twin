@@ -1,0 +1,112 @@
+# Compiled class file
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Maven
+target/
+!target/README.md
+
+# Gradle
+.gradle
+build/
+
+# STS when using Gradle
+.gradle/
+!gradle-wrapper.jar
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Database
+*.db
+*.db-journal
+
+# Environment specific files
+.env
+config.properties
+application-*.yml
+application-*.properties
+
+# Docker
+.docker
+
+# Local configuration files (surface these on demand)
+*.local
+
+# Native method names
+*.def
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Linux
+*~
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary folders
+tmp/
+temp/
+
+# Prompts folder
+Prompts/

@@ -1,0 +1,23 @@
+package com.industrial.digitaltwin.alertanalytics.model;
+
+public enum AlertType {
+    TEMPERATURE_HIGH,
+    TEMPERATURE_LOW,
+    VIBRATION_HIGH,
+    VIBRATION_LOW,
+    LOAD_HIGH,
+    LOAD_LOW,
+    PRESSURE_HIGH,
+    PRESSURE_LOW,
+    RPM_HIGH,
+    RPM_LOW,
+    OVERHEATING,
+    EXCESSIVE_VIBRATION,
+    PRESSURE_ANOMALY,
+    RPM_ANOMALY,
+    DEGRADATION,
+    PATTERN_ANOMALY,
+    STATISTICAL_OUTLIER,
+    CRITICAL_FAILURE,
+    MAINTENANCE_DUE
+}

@@ -1,0 +1,94 @@
+server:
+  port: 8083
+
+app:
+  alert-analytics:
+    alert-processing:
+      deduplication-window: 5m # 5 minutes for duplicate filtering
+      correlation-window: 10m   # 10 minutes for related alert grouping
+      critical-threshold: 2m     # Max time before escalation
+    analytics:
+      calculation-interval: 1m  # Calculate metrics every minute
+      reporting-interval: 1h    # Generate reports every hour
+      retention-period: 30d     # Keep analytics data for 30 days
+    notification:
+      critical-delay: 30s       # Delay before escalating critical alerts
+      retry-attempts: 3         # Number of notification retry attempts
+
+kafka:
+  bootstrap-servers: localhost:9092
+  consumer:
+    group-id: alert-analytics-group
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    auto-offset-reset: latest
+    enable-auto-commit: false
+  producer:
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/alert_analytics
+    username: alert_analytics_user
+    password: ${POSTGRES_PASSWORD:password123}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Validate schema against entities, but don't update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  kafka:
+    consumer:
+      bootstrap-servers: ${kafka.bootstrap-servers}
+      group-id: ${kafka.consumer.group-id}
+      key-deserializer: ${kafka.consumer.key-deserializer}
+      value-deserializer: ${kafka.consumer.value-deserializer}
+      auto-offset-reset: ${kafka.consumer.auto-offset-reset}
+      enable-auto-commit: ${kafka.consumer.enable-auto-commit}
+    producer:
+      bootstrap-servers: ${kafka.bootstrap-servers}
+      key-serializer: ${kafka.producer.key-serializer}
+      value-serializer: ${kafka.producer.value-serializer}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Notification configuration
+notification:
+  channels:
+    email:
+      enabled: false
+      from:         #Your email.
+      to:           #To the maintance email
+      smtp-host: smtp.gmail.com
+      smtp-port: 587
+      username: ${EMAIL_USERNAME:}
+      password: ${EMAIL_PASSWORD:}
+      starttls-enabled: true
+    sms:
+      enabled: false
+      provider: twilio
+      to:             #Maintance phone number
+      account-sid: ${TWILIO_ACCOUNT_SID:}
+      auth-token: ${TWILIO_AUTH_TOKEN:}
+      from-number: ${TWILIO_PHONE_NUMBER:}
+    webhook:
+      enabled: true
+      endpoints:
+        - url: https://maintenance-system.com/api/alerts
+          headers:
+            Authorization: "Bearer ${MAINTENANCE_API_KEY:}"

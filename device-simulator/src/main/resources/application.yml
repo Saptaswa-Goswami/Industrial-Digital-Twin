@@ -1,0 +1,168 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: device-simulator
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: 1
+      retries: 3
+      batch-size: 16384
+      linger-ms: 5
+      buffer-memory: 33554432
+
+app:
+  data-source:
+    mode: "simulator"  # Can switch to "opc-ua" or "mqtt" for real machines
+    simulation:
+      enabled: true
+      machines-count: 15
+      sampling-interval: 5000  # milliseconds
+      anomaly-probability: 0.05  # 5% chance of anomaly
+    real-machines:
+      enabled: false    # Enable when ready for real integration
+      protocol: "opc-ua"  # opc-ua, mqtt, modbus, etc.
+  
+  simulation:
+    sampling-interval: 5000  # milliseconds
+    anomaly-probability: 0.05  # 5% chance of anomaly
+    machines:
+      # Centrifugal Pump
+      - id: "PUMP_001"
+        type: "centrifugal-pump"
+        baseline-temp: 65.0
+        temp-variation: 10.0
+        baseline-vibration: 1.2
+        vibration-variation: 0.8
+        operational-pattern: "continuous"
+      # Rotary Compressor
+      - id: "COMP_001"
+        type: "rotary-compressor"
+        baseline-temp: 75.0
+        temp-variation: 15.0
+        baseline-vibration: 1.8
+        vibration-variation: 1.2
+        operational-pattern: "intermittent"
+      # Industrial Motor (AC/DC)
+      - id: "MOTOR_001"
+        type: "industrial-motor"
+        baseline-temp: 70.0
+        temp-variation: 12.0
+        baseline-vibration: 1.5
+        vibration-variation: 1.0
+        operational-pattern: "continuous"
+      # Conveyor Belt System
+      - id: "CONV_001"
+        type: "conveyor-belt"
+        baseline-temp: 60.0
+        temp-variation: 8.0
+        baseline-vibration: 2.0
+        vibration-variation: 1.5
+        operational-pattern: "continuous"
+      # Gearbox
+      - id: "GEAR_001"
+        type: "gearbox"
+        baseline-temp: 70.0
+        temp-variation: 10.0
+        baseline-vibration: 1.6
+        vibration-variation: 0.9
+        operational-pattern: "continuous"
+      # Heat Exchanger
+      - id: "HEAT_001"
+        type: "heat-exchanger"
+        baseline-temp: 80.0
+        temp-variation: 20.0
+        baseline-vibration: 0.8
+        vibration-variation: 0.5
+        operational-pattern: "continuous"
+      # Steam Turbine
+      - id: "TURB_001"
+        type: "steam-turbine"
+        baseline-temp: 85.0
+        temp-variation: 15.0
+        baseline-vibration: 2.2
+        vibration-variation: 1.2
+        operational-pattern: "continuous"
+      # Cooling Tower
+      - id: "COOL_001"
+        type: "cooling-tower"
+        baseline-temp: 55.0
+        temp-variation: 8.0
+        baseline-vibration: 1.0
+        vibration-variation: 0.6
+        operational-pattern: "continuous"
+      # Industrial Fan
+      - id: "FAN_001"
+        type: "industrial-fan"
+        baseline-temp: 60.0
+        temp-variation: 10.0
+        baseline-vibration: 1.8
+        vibration-variation: 1.0
+        operational-pattern: "continuous"
+      # Hydraulic Press
+      - id: "PRESS_001"
+        type: "hydraulic-press"
+        baseline-temp: 75.0
+        temp-variation: 12.0
+        baseline-vibration: 2.5
+        vibration-variation: 1.8
+        operational-pattern: "intermittent"
+      # Boiler System
+      - id: "BOIL_001"
+        type: "boiler-system"
+        baseline-temp: 90.0
+        temp-variation: 25.0
+        baseline-vibration: 1.2
+        vibration-variation: 0.8
+        operational-pattern: "continuous"
+      # Rotary Kiln
+      - id: "KILN_001"
+        type: "rotary-kiln"
+        baseline-temp: 95.0
+        temp-variation: 30.0
+        baseline-vibration: 2.0
+        vibration-variation: 1.5
+        operational-pattern: "continuous"
+      # Crane System
+      - id: "CRANE_001"
+        type: "crane-system"
+        baseline-temp: 65.0
+        temp-variation: 10.0
+        baseline-vibration: 2.8
+        vibration-variation: 2.0
+        operational-pattern: "intermittent"
+      # Cooling Pump
+      - id: "CPUMP_001"
+        type: "cooling-pump"
+        baseline-temp: 60.0
+        temp-variation: 8.0
+        baseline-vibration: 1.1
+        vibration-variation: 0.7
+        operational-pattern: "continuous"
+      # Reciprocating Compressor
+      - id: "RECP_001"
+        type: "reciprocating-compressor"
+        baseline-temp: 80.0
+        temp-variation: 18.0
+        baseline-vibration: 3.0
+        vibration-variation: 2.0
+        operational-pattern: "intermittent"
+  
+  kafka:
+    telemetry-topic: "machine-telemetry"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+  info:
+    git:
+      mode: full
