@@ -6,13 +6,13 @@ This project implements a backend-only, event-driven system that simulates indus
 
 The Industrial Equipment Digital Twin system follows a microservices architecture with event-driven communication patterns. The system consists of three main services that communicate through Apache Kafka topics.
 
-```
-┌─────────────────────┐    Kafka Topics     ┌─────────────┐    Kafka Topics     ┌─────────────────────┐
-│                     │ ────────────────→   │                     │ ────────────────→   │                     │
-│  Device Simulator   │                     │  Digital Twin       │                     │  Alert/Analytics    │
-│  Service            │ ←──────────────     │  Service            │ ←──────────────     │  Service            │
-│                     │   State Updates     │                     │   Anomaly Events    │                     │
-└─────────────────────┘                     └─────────────────────┘                     └─────────────────────┘
+```mermaid
+graph LR
+    A[Device Simulator Service] -->|machine-telemetry| B[Digital Twin Service]
+    B -->|machine-state-updates| C[Alert/Analytics Service]
+    B -->|anomaly-events| C
+    C -->|alerts| D[(Kafka)]
+    C -->|analytics-reports| D
 ```
 
 ## Services
@@ -49,12 +49,13 @@ The system uses Apache Kafka (Confluent Kafka 7.6.1) in KRaft mode (without Zook
 
 ### Kafka Topics
 
-The system uses four main Kafka topics:
+The system uses the following Kafka topics for communication between services:
 
-1. `machine-telemetry` - Raw sensor data from devices
-2. `machine-state-updates` - Updated machine states from digital twin
-3. `anomaly-events` - Detected anomalies from digital twin
-4. `alerts` - Generated alerts for further processing
+1. `machine-telemetry` - Raw sensor data from devices (produced by Device Simulator, consumed by Digital Twin)
+2. `machine-state-updates` - Updated machine states from digital twin (produced by Digital Twin, consumed by Alert/Analytics)
+3. `anomaly-events` - Detected anomalies from digital twin (produced by Digital Twin, consumed by Alert/Analytics)
+4. `alerts` - Generated alerts for further processing (produced by Alert/Analytics)
+5. `analytics-reports` - Analytics and performance metrics (produced by Alert/Analytics)
 
 ## Technology Stack
 
@@ -68,7 +69,7 @@ The system uses four main Kafka topics:
 
 1. Ensure Docker Desktop with WSL2 is installed and configured with at least 5GB memory
 2. Clone the repository
-3. Run `docker-compose up --build` to start all services
+3. Run `docker-compose build && docker-compose up -d` to start all services
 4. The system will simulate 15 different types of industrial machines
 5. Access Kafka UI at `http://localhost:8080` to monitor topics and messages
 6. Monitor the system through the exposed endpoints
@@ -80,10 +81,3 @@ The system uses four main Kafka topics:
 - `alert-analytics/` - Processes alerts and performs analytics
 - `docker-compose.yml` - Orchestrates all services
 - `docs/` - Documentation files
-
-## Why This Project is Impressive
-
-- **Unique & Rare**: Industrial digital twin + predictive maintenance is uncommon in CVs
-- **Backend-Heavy**: Fully demonstrates Kafka expertise — event sourcing, replay, partitions, consumer groups, DLQs, exactly-once semantics
-- **Real-World Relevance**: Solves a tangible problem seen in factories, energy plants, or production lines
-- **Scalable & Observable**: Can simulate hundreds of machines, replay events, and compute analytics — great talking points for interviews
