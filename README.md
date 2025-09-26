@@ -81,4 +81,5 @@ The system uses the following Kafka topics for communication between services:
 - `digital-twin/` - Maintains real-time state and detects anomalies
 - `alert-analytics/` - Processes alerts and performs analytics
 - `docker-compose.yml` - Orchestrates all services
-- `docs/` - Documentation files
+- `Docs/` - Documentation files
+- `scripts/` - Python scripts for automated testing.
