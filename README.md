@@ -69,7 +69,7 @@ The system uses the following Kafka topics for communication between services:
 
 ## Getting Started
 
-1. Ensure Docker Desktop with WSL2 is installed.
+1. Ensure Docker Desktop with WSL2 is installed (For Windows).
 2. Clone the repository
 3. Run `docker-compose build && docker-compose up -d` to start all services
 4. The system will simulate 15 different types of industrial machines
