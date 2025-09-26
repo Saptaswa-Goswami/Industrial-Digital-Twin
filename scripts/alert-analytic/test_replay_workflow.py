@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Automated testing script for Alert Analytics Service Replay functionality
 Tests the complete replay workflow:
@@ -68,18 +67,15 @@ def start_replay(min_time, max_time):
     """Start a replay with a long time range and multiplier 5.0"""
     print_header("STEP 2: Starting Replay")
     
-    # Use a time range that covers most of the available data
-    # Parse the timestamps and adjust slightly to ensure data exists
     try:
         # Convert string timestamps to datetime objects
         min_dt = datetime.fromisoformat(min_time.replace('Z', '+00:00'))
         max_dt = datetime.fromisoformat(max_time.replace('Z', '+00:00'))
         
         # Adjust the range to ensure we have data
-        # Use a smaller range toward the end to ensure we're using the most recent data
         range_duration = max_dt - min_dt
-        start_time = max_dt - range_duration * 0.5  # Start 50% from the end (more recent data)
-        end_time = max_dt - range_duration * 0.1    # End 10% from the end (most recent data)
+        start_time = max_dt - range_duration * 0.5 # 50% from the end
+        end_time = max_dt - range_duration * 0.1    # 10% before the end
         
         # Format as ISO strings
         start_time_str = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
@@ -127,81 +123,69 @@ def test_replay_operation(replay_id, operation, endpoint_suffix, method="GET", e
 def test_status(replay_id, step_number):
     """Test the status endpoint"""
     print_header(f"STEP {step_number}: Checking Replay Status")
-    time.sleep(2)  # Small delay before checking status
+    time.sleep(2)
     return test_replay_operation(replay_id, "check status", "status", "GET", 200)
 
 def test_pause(replay_id):
-    """Test the pause endpoint"""
     print_header("STEP 4: Pausing Replay")
-    time.sleep(1)  # Small delay before pausing
+    time.sleep(1)
     return test_replay_operation(replay_id, "pause replay", "pause", "POST", 200)
 
 def test_resume(replay_id):
-    """Test the resume endpoint"""
     print_header("STEP 6: Resuming Replay")
-    time.sleep(1)  # Small delay before resuming
+    time.sleep(1)
     return test_replay_operation(replay_id, "resume replay", "resume", "POST", 200)
 
 def test_stop(replay_id):
-    """Test the stop endpoint"""
     print_header("STEP 8: Stopping Replay")
-    time.sleep(1)  # Small delay before stopping
+    time.sleep(1)
     return test_replay_operation(replay_id, "stop replay", "stop", "POST", 200)
 
 def main():
     """Main test workflow"""
+    start_dt = datetime.now()
+    
     print_header("ALERT ANALYTICS SERVICE - REPLAY WORKFLOW TEST")
     print(f"Testing endpoints at: {BASE_URL}")
     print(f"Target machine ID: {MACHINE_ID}")
-    print(f"Start time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Start time: {start_dt.strftime('%Y-%m-%d %H:%M:%S')}")
     
-    # Step 1: Get time boundaries
     min_time, max_time = get_time_boundaries()
     if not min_time or not max_time:
         print("[FAIL] Could not retrieve time boundaries")
         return
     
-    # Time boundaries already displayed in the API response above
-    
-    # Step 2: Start replay
     replay_id = start_replay(min_time, max_time)
     if not replay_id:
         print("[FAIL] Could not start replay")
         return
     
-    # Step 3: Check initial status
     if not test_status(replay_id, 3):
         print("[FAIL] Initial status check failed")
         return
     
-    # Step 4: Pause replay
     if not test_pause(replay_id):
         print("[FAIL] Pause operation failed")
         return
     
-    # Step 5: Check status after pause
     if not test_status(replay_id, 5):
         print("[FAIL] Status check after pause failed")
         return
     
-    # Step 6: Resume replay
     if not test_resume(replay_id):
         print("[FAIL] Resume operation failed")
         return
     
-    # Step 7: Check status after resume
     if not test_status(replay_id, 7):
         print("[FAIL] Status check after resume failed")
         return
     
-    # Step 8: Stop replay
     if not test_stop(replay_id):
         print("[FAIL] Stop operation failed")
         return
     
-    # Step 9: Check status after stop (should fail with 404)
     print_header("STEP 9: Checking Status After Stop (Should Return 404)")
-    time.sleep(1)  # Small delay before final status check
+    time.sleep(1)
     success = test_replay_operation(replay_id, "check status after stop", "status", "GET", 404)
     
     if success:
@@ -209,8 +193,11 @@ def main():
     else:
         print("\n[FAIL] Final status check did not return expected 404 status")
     
+    end_dt = datetime.now()
+    duration_seconds = int((end_dt - start_dt).total_seconds())
+    minutes, seconds = divmod(duration_seconds, 60)
+    
     print_header("TEST COMPLETED")
-    print(f"End time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 if __name__ == "__main__":
     main()

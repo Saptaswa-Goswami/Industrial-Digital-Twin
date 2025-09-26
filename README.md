@@ -62,19 +62,20 @@ The system uses the following Kafka topics for communication between services:
 ## Technology Stack
 
 - **Backend Framework**: Java 21 + Spring Boot 3.x
-- **Event Streaming**: Apache Kafka (Confluent KRaft mode)
-- **Database**: PostgreSQL
+- **Event Streaming**: Apache Kafka (Confluent KRaft mode) (NO zookeeper)
+- **Database**: PostgreSQL & TimescaleDB
 - **Containerization**: Docker with multi-stage builds
 - **Monitoring**: Spring Boot Actuator
 
 ## Getting Started
 
-1. Ensure Docker Desktop with WSL2 is installed and configured with at least 5GB memory
+1. Ensure Docker Desktop with WSL2 is installed.
 2. Clone the repository
 3. Run `docker-compose build && docker-compose up -d` to start all services
 4. The system will simulate 15 different types of industrial machines
-5. Access Kafka UI at `http://localhost:8080` to monitor topics and messages
+5. Access Kafka UI at `http://localhost:9099` to monitor topics and messages
 6. Monitor the system through the exposed endpoints
+7. Test with the python scripts.
 
 ## Project Structure
 
