@@ -69,11 +69,12 @@ The system uses the following Kafka topics for communication between services:
 
 1. Ensure Docker Desktop with WSL2 is installed (For Windows).
 2. Clone the repository
-3. Run `docker-compose build && docker-compose up -d` to start all services
-4. The system will simulate 15 different types of industrial machines
-5. Access Kafka UI at `http://localhost:9099` to monitor topics and messages
-6. Monitor the system through the exposed endpoints
-7. Test with the python scripts.
+3. Run `docker compose build && docker compose up -d` to start all services
+4. Wait for all the services is running and healthy. Confirm with `docker ps -a`.
+5. The system will simulate 15 different types of industrial machines
+6. Access Kafka UI at `http://localhost:9099` to monitor topics and messages
+7. Monitor the system through the exposed endpoints.
+8. Test with the python scripts.
 
 ## Project Structure
 
