@@ -1,6 +1,6 @@
 # Industrial Digital Twin & Predictive Maintenance Platform | Event-Driven Microservices Architecture with Real-Time Anomaly Detection
 
-This project implements a backend-only, event-driven system that simulates industrial machinery, tracks their state in real-time, detects anomalies, and triggers alerts for predictive maintenance using Kafka and Java + Spring Boot.
+This project implements a backend-only, event-driven system that simulates industrial machinery, tracks their state in real-time, detects anomalies, and triggers alerts for predictive maintenance using Apache Kafka and Java + Spring Boot.
 
 ## Architecture Overview
 
